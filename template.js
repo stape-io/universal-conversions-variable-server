@@ -432,12 +432,14 @@ function getKlaviyoItems(inputArray) {
 
 function getOpenAIContents(inputArray) {
   const contentType = data.contentTypeOpenAI;
+  const groupIdKey = data.openAIKeyGroupId;
   const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
   return inputArray.map((item) => {
     const id = getId(item);
     const amount = item[keyPrice] ? makeNumber(item[keyPrice]) : 0;
     return {
       id: id ? makeString(id) : undefined,
+      group_id: groupIdKey && item[groupIdKey] ? makeString(item[groupIdKey]) : undefined,
       amount: convertCurrencyValueToMinorUnit(amount, currency),
       name: item[keyName] ? makeString(item[keyName]) : undefined,
       quantity: item[keyQuantity] ? makeInteger(item[keyQuantity]) : undefined,
