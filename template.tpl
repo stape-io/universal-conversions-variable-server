@@ -478,14 +478,22 @@ ___TEMPLATE_PARAMETERS___
                   }
                 ],
                 "simpleValueType": true,
-                "help": "As described in the \u003ca href\u003d\"https://developers.openai.com/ads/supported-events\"\u003eofficial documentation\u003c/a\u003e as of June 2026."
+                "help": "As described in the \u003ca href\u003d\"https://developers.openai.com/ads/supported-events\"\u003eofficial documentation\u003c/a\u003e as of September 2026."
+              },
+              {
+                "type": "TEXT",
+                "name": "openAIKeyGroupId",
+                "displayName": "Group ID Key",
+                "simpleValueType": true,
+                "help": "Input Array key for the item\u2019s \u003cstrong\u003egroup/parent ID\u003c/strong\u003e (maps to \u003ci\u003econtents[].group_id\u003c/i\u003e). Optional.",
+                "valueHint": "group_id"
               }
             ]
           },
           {
             "value": "amount",
             "displayValue": "amount",
-            "help": "Returns the total event value as described in \u003ca href\u003d\"https://developers.openai.com/ads/supported-events#contents\"\u003e official documentation\u003c/a\u003e as of June 2026."
+            "help": "Returns the total event value as described in \u003ca href\u003d\"https://developers.openai.com/ads/supported-events#contents\"\u003e official documentation\u003c/a\u003e as of September 2026."
           }
         ],
         "simpleValueType": true,
@@ -1818,12 +1826,14 @@ function getKlaviyoItems(inputArray) {
 
 function getOpenAIContents(inputArray) {
   const contentType = data.contentTypeOpenAI;
+  const groupIdKey = data.openAIKeyGroupId;
   const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
   return inputArray.map((item) => {
     const id = getId(item);
     const amount = item[keyPrice] ? makeNumber(item[keyPrice]) : 0;
     return {
       id: id ? makeString(id) : undefined,
+      group_id: groupIdKey && item[groupIdKey] ? makeString(item[groupIdKey]) : undefined,
       amount: convertCurrencyValueToMinorUnit(amount, currency),
       name: item[keyName] ? makeString(item[keyName]) : undefined,
       quantity: item[keyQuantity] ? makeInteger(item[keyQuantity]) : undefined,
@@ -1890,6 +1900,10 @@ setup: ''
 
 
 ___NOTES___
+
+2026-09-09 - Change Notes:
+ - Add OpenAI contents group_id support (Group ID Key) to match the current OpenAI Conversions API Content schema.
+ - Refresh OpenAI documentation links to reflect the latest official docs revision.
 
 2026-06-15 - Change Notes:
  - Add OpenAI Ads parameters.
